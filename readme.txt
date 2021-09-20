@@ -1,3 +1,8 @@
+TeeMo For Chinese
+
+
+
+Teeworlds
 Copyright (c) 2016 Magnus Auvinen
 
 
