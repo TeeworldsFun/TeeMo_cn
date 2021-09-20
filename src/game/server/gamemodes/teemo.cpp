@@ -97,13 +97,13 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
             if (str_comp_nocase(param.c_str(), "list") == 0)
             {
                 GameServer()->SendChatTarget(ChatterClientID, "-");
-                GameServer()->SendChatTarget(ChatterClientID, "TeeMo - Roles");
+                GameServer()->SendChatTarget(ChatterClientID, "TeeMo - 角色列表");
                 GameServer()->SendChatTarget(ChatterClientID, "---------- ---- -- -");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Soldier");
-                GameServer()->SendChatTarget(ChatterClientID, "+ General");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Medic");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Spy");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Engineer");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Soldier 士兵  --输入 "/role soldier"成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ General 将军  --输入 "/role general"成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Medic 医生    --输入 "/role medic"成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Spy 间谍      --输入 "/role spy"成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Engineer 工程师-输入 "/role engineer"成为此角色");
             }
             else if (str_comp_nocase(param.c_str(), "soldier") == 0 ||
                        str_comp_nocase(param.c_str(), "general") == 0 ||
@@ -114,7 +114,7 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
                 if (pPlayer->GetInfoTEEMO()->GetRole() == GetRoleID(param.c_str()))
                 {
                     char buff[128];
-                    str_format(buff, sizeof(buff), "Actually you are a %s", GetRoleName(GetRoleID(param.c_str())));
+                    str_format(buff, sizeof(buff), "你已经是%s了", GetRoleName(GetRoleID(param.c_str())));
                     GameServer()->SendChatTarget(ChatterClientID, buff);
                     return false;
                 }
@@ -124,20 +124,20 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
                     if (str_comp_nocase(param.c_str(), "spy") != 0)
                     {
                         char buff[128];
-                        str_format(buff, sizeof(buff), "'%s' changed role to %s", Server()->ClientName(ChatterClientID), GetRoleName(GetRoleID(param.c_str())));
+                        str_format(buff, sizeof(buff), "'%s'将角色改为%s", Server()->ClientName(ChatterClientID), GetRoleName(GetRoleID(param.c_str())));
                         GameServer()->SendChat(-1, CGameContext::CHAT_ALL, buff);
                     }
                 }
                 else {
                     char buff[128];
-                    str_format(buff, sizeof(buff), "Can't change role to %s", GetRoleName(GetRoleID(param.c_str())));
+                    str_format(buff, sizeof(buff), "无法将角色改为%s", GetRoleName(GetRoleID(param.c_str())));
                     GameServer()->SendChatTarget(ChatterClientID, buff);
                 }
             }
             else
             {
                 char buff[128];
-                str_format(buff, sizeof(buff), "Unknown parameter '%s'", param.c_str());
+                str_format(buff, sizeof(buff), "无效的参数'%s'", param.c_str());
                 GameServer()->SendChatTarget(ChatterClientID, buff);
             }
         }
@@ -145,19 +145,20 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
     else if (str_comp_nocase(command.c_str(), "about") == 0)
     {
         GameServer()->SendChatTarget(ChatterClientID, "-");
-        GameServer()->SendChatTarget(ChatterClientID, "TeeMo - About");
+        GameServer()->SendChatTarget(ChatterClientID, "TeeMo - 关于");
         GameServer()->SendChatTarget(ChatterClientID, "---------- ---- -- -");
-        GameServer()->SendChatTarget(ChatterClientID, "Author: unsigned char* (teemo@redneboa.es)");
-        GameServer()->SendChatTarget(ChatterClientID, "Version: v"TEEMO_VERSION" (build: "TEEMO_BUILD")");
+        GameServer()->SendChatTarget(ChatterClientID, "作者: unsigned char* (teemo@redneboa.es)");
+        GameServer()->SendChatTarget(ChatterClientID, "版本: v"TEEMO_VERSION" (build: "TEEMO_BUILD")");
         GameServer()->SendChatTarget(ChatterClientID, "-");
-        GameServer()->SendChatTarget(ChatterClientID, "SPECIAL THANKS");
+        GameServer()->SendChatTarget(ChatterClientID, "特别感谢");
         GameServer()->SendChatTarget(ChatterClientID, "----------------- ---- -- -");
         GameServer()->SendChatTarget(ChatterClientID, "MuffinMario (Beta-Tester)");
+	GameServer()->SendChatTarget(ChatterClientID, "FlowerFell-Sans (中文翻译者,服务器托管)");
     }
     else
     {
         char buff[128];
-        str_format(buff, sizeof(buff), "Unknown commmand '%s'", command.c_str());
+        str_format(buff, sizeof(buff), "无效的指令 '%s'", command.c_str());
         GameServer()->SendChatTarget(ChatterClientID, buff);
     }
 
@@ -170,12 +171,12 @@ void CGameControllerTEEMO::OnClientEnter(int ClientID)
     GameServer()->m_apPlayers[ClientID]->GetInfoTEEMO()->Reset();
     GameServer()->m_apPlayers[ClientID]->GetInfoTEEMO()->SetRealTeam(GameServer()->m_apPlayers[ClientID]->GetTeam());
 
-    GameServer()->SendChatTarget(ClientID, "Welcome to TeeMo v"TEEMO_VERSION);
-    GameServer()->SendChatTarget(ClientID, "Type '/cmdlist' for a list commands.");
+    GameServer()->SendChatTarget(ClientID, "欢迎来到TeeMo v"TEEMO_VERSION);
+    GameServer()->SendChatTarget(ClientID, "输入/cmdlist获取角色列表");
     GameServer()->SendChatTarget(ClientID, " ");
     if (!HaveOriginalConfig())
     {
-        GameServer()->SendChatTarget(ClientID, "-- WARNG: This server is using a tuned/modified configuration.");
+        GameServer()->SendChatTarget(ClientID, "-- 警告 此服务器使用了tune");
         GameServer()->SendChatTarget(ClientID, " ");
     }
 
@@ -259,7 +260,7 @@ const char* CGameControllerTEEMO::GetRoleName(int role)
     else if (role == ROLE_GENERAL) { return "General"; }
     else if (role == ROLE_MEDIC) { return "Medic"; }
     else if (role == ROLE_SOLDIER) { return "Soldier"; }
-    else if (role == ROLE_SPY) { return "Soldier"; } // Hide real name
+    else if (role == ROLE_SPY) { return "Solier"; } // Hide real name
 
     return "Unknown";
 }
@@ -355,7 +356,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         UpdateClientClan(pPlayerVictim->GetCID());
 
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' found and kill a spy!", Server()->ClientName(pKiller->GetCID()));
+        str_format(buff, sizeof(buff), "'%s' 找到并杀死了一个间谍！", Server()->ClientName(pKiller->GetCID()));
         GameServer()->SendChat(-1, pKiller->GetTeam(), buff);
     }
 
@@ -384,7 +385,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_FLY);
         pKiller->GetInfoTEEMO()->m_FlyBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' kills %d players without death and give FLY bonus.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s' kills %d 个玩家 获得了奖励rv r)->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_InvisibleBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_INVISIBLE))
@@ -400,7 +401,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_HOOKER);
         pKiller->GetInfoTEEMO()->m_HookerBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' kills %d players without death and give HOOKER bonus.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s' kills %d players wsahout death and give HOOKER bonus.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_ExtraBombBonusKills == 0 && pKiller->GetCharacter())
