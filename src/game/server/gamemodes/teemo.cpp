@@ -99,11 +99,11 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
                 GameServer()->SendChatTarget(ChatterClientID, "-");
                 GameServer()->SendChatTarget(ChatterClientID, "TeeMo - 角色列表");
                 GameServer()->SendChatTarget(ChatterClientID, "---------- ---- -- -");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Soldier 士兵  --输入 "/role soldier"成为此角色");
-                GameServer()->SendChatTarget(ChatterClientID, "+ General 将军  --输入 "/role general"成为此角色");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Medic 医生    --输入 "/role medic"成为此角色");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Spy 间谍      --输入 "/role spy"成为此角色");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Engineer 工程师-输入 "/role engineer"成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Soldier 士兵  --输入 '/role soldier'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ General 将军  --输入 '/role general'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Medic 医生    --输入 '/role medic'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Spy 间谍      --输入 '/role spy'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Engineer 工程师-输入 '/role engineer'成为此角色");
             }
             else if (str_comp_nocase(param.c_str(), "soldier") == 0 ||
                        str_comp_nocase(param.c_str(), "general") == 0 ||
@@ -393,7 +393,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_FLY);
         pKiller->GetInfoTEEMO()->m_FlyBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 飞行," Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 飞行", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_InvisibleBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_INVISIBLE))
