@@ -163,11 +163,11 @@ void CGameContext::CreateExplosion(vec2 Pos, int Owner, int Weapon, bool NoDamag
                 if (pLaserTurret->GetHealth() > 0.0f)
                 {
                     char buff[255]={0};
-                    str_format(buff, sizeof(buff), "TURRET HEALTH: %d", pLaserTurret->GetHealth());
+                    str_format(buff, sizeof(buff), "炮台血量: %d", pLaserTurret->GetHealth());
                     SendBroadcast(buff, Owner);
                 }
                 else
-                    SendBroadcast("TURRET DESTROYED!", Owner);
+                    SendBroadcast("炮台被摧毁！", Owner);
             }
         }
 	}
@@ -418,7 +418,7 @@ void CGameContext::SwapTeams()
 	if(!m_pController->IsTeamplay())
 		return;
 
-	SendChat(-1, CGameContext::CHAT_ALL, "Teams were swapped");
+	SendChat(-1, CGameContext::CHAT_ALL, "队伍反转");
 
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
@@ -456,7 +456,7 @@ void CGameContext::OnTick()
 		// abort the kick-vote on player-leave
 		if(m_VoteCloseTime == -1)
 		{
-			SendChat(-1, CGameContext::CHAT_ALL, "Vote aborted");
+			SendChat(-1, CGameContext::CHAT_ALL, "平票");
 			EndVote();
 		}
 		else
@@ -511,7 +511,7 @@ void CGameContext::OnTick()
 				Console()->ExecuteLine(m_aVoteCommand);
 				Server()->SetRconCID(IServer::RCON_CID_SERV);
 				EndVote();
-				SendChat(-1, CGameContext::CHAT_ALL, "Vote passed");
+				SendChat(-1, CGameContext::CHAT_ALL, "投票通过");
 
 				if(m_apPlayers[m_VoteCreator])
 					m_apPlayers[m_VoteCreator]->m_LastVoteCall = 0;
@@ -519,7 +519,7 @@ void CGameContext::OnTick()
 			else if(m_VoteEnforce == VOTE_ENFORCE_NO || time_get() > m_VoteCloseTime)
 			{
 				EndVote();
-				SendChat(-1, CGameContext::CHAT_ALL, "Vote failed");
+				SendChat(-1, CGameContext::CHAT_ALL, "投票失败");
 			}
 			else if(m_VoteUpdate)
 			{
@@ -561,7 +561,7 @@ void CGameContext::OnClientEnter(int ClientID)
 	//world.insert_entity(&players[client_id]);
 	m_apPlayers[ClientID]->Respawn();
 	char aBuf[512];
-	str_format(aBuf, sizeof(aBuf), "'%s' entered and joined the %s", Server()->ClientName(ClientID), m_pController->GetTeamName(m_apPlayers[ClientID]->GetTeam()));
+	str_format(aBuf, sizeof(aBuf), "'%s'加入了%s", Server()->ClientName(ClientID), m_pController->GetTeamName(m_apPlayers[ClientID]->GetTeam()));
 	SendChat(-1, CGameContext::CHAT_ALL, aBuf);
 
 	str_format(aBuf, sizeof(aBuf), "team_join player='%d:%s' team=%d", ClientID, Server()->ClientName(ClientID), m_apPlayers[ClientID]->GetTeam());
@@ -691,13 +691,13 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			pPlayer->m_LastVoteTry = Now;
 			if(pPlayer->GetTeam() == TEAM_SPECTATORS)
 			{
-				SendChatTarget(ClientID, "Spectators aren't allowed to start a vote.");
+				SendChatTarget(ClientID, "旁观者不能投票.");
 				return;
 			}
 
 			if(m_VoteCloseTime)
 			{
-				SendChatTarget(ClientID, "Wait for current vote to end before calling a new one.");
+				SendChatTarget(ClientID, "请等待当前投票结束，再发起另一个投票.");
 				return;
 			}
 
@@ -705,7 +705,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			if(pPlayer->m_LastVoteCall && Timeleft > 0)
 			{
 				char aChatmsg[512] = {0};
-				str_format(aChatmsg, sizeof(aChatmsg), "You must wait %d seconds before making another vote", (Timeleft/Server()->TickSpeed())+1);
+				str_format(aChatmsg, sizeof(aChatmsg), "你必须等待%d秒再发起投票", (Timeleft/Server()->TickSpeed())+1);
 				SendChatTarget(ClientID, aChatmsg);
 				return;
 			}
@@ -714,7 +714,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			char aDesc[VOTE_DESC_LENGTH] = {0};
 			char aCmd[VOTE_CMD_LENGTH] = {0};
 			CNetMsg_Cl_CallVote *pMsg = (CNetMsg_Cl_CallVote *)pRawMsg;
-			const char *pReason = pMsg->m_Reason[0] ? pMsg->m_Reason : "No reason given";
+			const char *pReason = pMsg->m_Reason[0] ? pMsg->m_Reason : "No reason give reason";
 
 			if(str_comp_nocase(pMsg->m_Type, "option") == 0)
 			{
@@ -723,7 +723,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				{
 					if(str_comp_nocase(pMsg->m_Value, pOption->m_aDescription) == 0)
 					{
-						str_format(aChatmsg, sizeof(aChatmsg), "'%s' called vote to change server option '%s' (%s)", Server()->ClientName(ClientID),
+						str_format(aChatmsg, sizeof(aChatmsg), "'%s'发起投票改变服务器设置'%s' (%s)", Server()->ClientName(ClientID),
 									pOption->m_aDescription, pReason);
 						str_format(aDesc, sizeof(aDesc), "%s", pOption->m_aDescription);
 						str_format(aCmd, sizeof(aCmd), "%s", pOption->m_aCommand);
@@ -735,7 +735,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 				if(!pOption)
 				{
-					str_format(aChatmsg, sizeof(aChatmsg), "'%s' isn't an option on this server", pMsg->m_Value);
+					str_format(aChatmsg, sizeof(aChatmsg), "'%s'不是一个服务器设置", pMsg->m_Value);
 					SendChatTarget(ClientID, aChatmsg);
 					return;
 				}
@@ -744,7 +744,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			{
 				if(!g_Config.m_SvVoteKick)
 				{
-					SendChatTarget(ClientID, "Server does not allow voting to kick players");
+					SendChatTarget(ClientID, "服务器不允许踢出玩家");
 					return;
 				}
 
@@ -864,7 +864,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 				pPlayer->m_LastSetTeam = Server()->Tick();
 				int TimeLeft = (pPlayer->m_TeamChangeTick - Server()->Tick())/Server()->TickSpeed();
 				char aBuf[128];
-				str_format(aBuf, sizeof(aBuf), "Time to wait before changing team: %02d:%02d", TimeLeft/60, TimeLeft%60);
+				str_format(aBuf, sizeof(aBuf), "请等待: %02d:%02d才能改变队伍", TimeLeft/60, TimeLeft%60);
 				SendBroadcast(aBuf, ClientID);
 				return;
 			}
@@ -882,12 +882,12 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					pPlayer->m_TeamChangeTick = Server()->Tick();
 				}
 				else
-					SendBroadcast("Teams must be balanced, please join other team", ClientID);
+					SendBroadcast("团队不平衡，请加入其他队伍", ClientID);
 			}
 			else
 			{
 				char aBuf[128];
-				str_format(aBuf, sizeof(aBuf), "Only %d active players are allowed", Server()->MaxClients()-g_Config.m_SvSpectatorSlots);
+				str_format(aBuf, sizeof(aBuf), "只有 %d 个玩家能同时进行", Server()->MaxClients()-g_Config.m_SvSpectatorSlots);
 				SendBroadcast(aBuf, ClientID);
 			}
 		}
@@ -920,7 +920,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			if(str_comp(aOldName, Server()->ClientName(ClientID)) != 0)
 			{
 				char aChatText[256];
-				str_format(aChatText, sizeof(aChatText), "'%s' changed name to '%s'", aOldName, Server()->ClientName(ClientID));
+				str_format(aChatText, sizeof(aChatText), "'%s'将碑文改成了'%s'", aOldName, Server()->ClientName(ClientID));
 				SendChat(-1, CGameContext::CHAT_ALL, aChatText);
 			}
 			Server()->SetClientClan(ClientID, pMsg->m_pClan);
@@ -1183,7 +1183,7 @@ void CGameContext::ConShuffleTeams(IConsole::IResult *pResult, void *pUserData)
 			++PlayerTeam;
 	PlayerTeam = (PlayerTeam+1)/2;
 
-	pSelf->SendChat(-1, CGameContext::CHAT_ALL, "Teams were shuffled");
+	pSelf->SendChat(-1, CGameContext::CHAT_ALL, "团队被打乱了");
 
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
@@ -1217,9 +1217,9 @@ void CGameContext::ConLockTeams(IConsole::IResult *pResult, void *pUserData)
 	CGameContext *pSelf = (CGameContext *)pUserData;
 	pSelf->m_LockTeams ^= 1;
 	if(pSelf->m_LockTeams)
-		pSelf->SendChat(-1, CGameContext::CHAT_ALL, "Teams were locked");
+		pSelf->SendChat(-1, CGameContext::CHAT_ALL, "队伍被锁定");
 	else
-		pSelf->SendChat(-1, CGameContext::CHAT_ALL, "Teams were unlocked");
+		pSelf->SendChat(-1, CGameContext::CHAT_ALL, "队伍被解除锁定");
 }
 
 void CGameContext::ConAddVote(IConsole::IResult *pResult, void *pUserData)
@@ -1645,21 +1645,21 @@ void CGameContext::ConGiveWeapon(IConsole::IResult *pResult, void *pUserData)
     {
         // TODO: Make function to get Weapon Name!!
         char buff[128] = {0};
-        if (Weapon == WEAPON_GRENADE) { str_format(buff, sizeof(buff), "Administrator give you a GRENADE weapon!"); }
-		else if (Weapon == WEAPON_GUN) { str_format(buff, sizeof(buff), "Administrator give you a GUN weapon!"); }
-		else if (Weapon == WEAPON_RIFLE) { str_format(buff, sizeof(buff), "Administrator give you a RIFLE weapon!"); }
-		else if (Weapon == WEAPON_SHOTGUN) { str_format(buff, sizeof(buff), "Administrator give you a SHOTGUN weapon!"); }
-		else if (Weapon == WEAPON_HAMMER) { str_format(buff, sizeof(buff), "Administrator give you a HAMMER weapon!"); }
-		else if (Weapon == WEAPON_NINJA) { str_format(buff, sizeof(buff), "Administrator give you a NINJA weapon!"); }
-        else if (Weapon == WEAPON_PHANTOM_GRENADE) { str_format(buff, sizeof(buff), "Administrator give you a PHANTOM GRENADE weapon!"); }
-        else if (Weapon == WEAPON_AIR_GRENADE) { str_format(buff, sizeof(buff), "Administrator give you a AIR GRENADE weapon!"); }
-        else if (Weapon == WEAPON_LASER_GRENADE) { str_format(buff, sizeof(buff), "Administrator give you a LASER GRENADE weapon!"); }
-        else if (Weapon == WEAPON_PLASMA_RIFLE) { str_format(buff, sizeof(buff), "Administrator give you a PLASMA weapon!"); }
-        else if (Weapon == WEAPON_TURRET) { str_format(buff, sizeof(buff), "Administrator give you a TURRET weapon!"); }
-        else if (Weapon == WEAPON_DRAGON_GRENADE) { str_format(buff, sizeof(buff), "Administrator give you a DRAGON GRENADE weapon!"); }
-        else if (Weapon == WEAPON_HEALER_RIFLE) { str_format(buff, sizeof(buff), "Administrator give you a LASER HEALER weapon!"); }
-        else if (Weapon == WEAPON_REPAIR_RIFLE) { str_format(buff, sizeof(buff), "Administrator give you a LASER REPAIR weapon!"); }
-        else if (Weapon == WEAPON_EXTRA_BOMB_GRENADE) { str_format(buff, sizeof(buff), "Administrator give you a EXTRA BOMB weapon!"); }
+        if (Weapon == WEAPON_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你一把榴弹枪!"); }
+		else if (Weapon == WEAPON_GUN) { str_format(buff, sizeof(buff), "管理员给了你一把手枪!"); }
+		else if (Weapon == WEAPON_RIFLE) { str_format(buff, sizeof(buff), "管理员给了你一把激光枪!"); }
+		else if (Weapon == WEAPON_SHOTGUN) { str_format(buff, sizeof(buff), "管理员给了你一把散弹枪!"); }
+		else if (Weapon == WEAPON_HAMMER) { str_format(buff, sizeof(buff), "管理员给了你一把锤子?"); }
+		else if (Weapon == WEAPON_NINJA) { str_format(buff, sizeof(buff), "管理员给了你忍者效果!"); }
+        else if (Weapon == WEAPON_PHANTOM_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你幻影榴弹炮!"); }
+        else if (Weapon == WEAPON_AIR_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你一把悬浮榴弹炮!"); }
+        else if (Weapon == WEAPON_LASER_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你一把激光榴弹炮!"); }
+        else if (Weapon == WEAPON_PLASMA_RIFLE) { str_format(buff, sizeof(buff), "管理员给了你一把等离子体发射器!"); }
+        else if (Weapon == WEAPON_TURRET) { str_format(buff, sizeof(buff), "管理员给了你一个炮台!"); }
+        else if (Weapon == WEAPON_DRAGON_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你一把龙炮!"); }
+        else if (Weapon == WEAPON_HEALER_RIFLE) { str_format(buff, sizeof(buff), "管理员给了你一把治疗激光!"); }
+        else if (Weapon == WEAPON_REPAIR_RIFLE) { str_format(buff, sizeof(buff), "管理员给了你一把修理激光!"); }
+        else if (Weapon == WEAPON_EXTRA_BOMB_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你额外爆炸武器"); }
         else
         {
             pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "Invalid weapon id to give");
@@ -1684,24 +1684,24 @@ void CGameContext::ConGiveBonus(IConsole::IResult *pResult, void *pUserData)
         {
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->AddBonus(BONUS_FLY);
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->m_FlyBonusTimer = pSelf->Server()->Tick();
-            pSelf->SendChatTarget(ClientID, "Administrator give you a FLY bonus!");
+            pSelf->SendChatTarget(ClientID, "管理员给了你飞行buff");
         }
         else if (Bonus == 1)
         {
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->AddBonus(BONUS_GOD);
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->m_GodBonusTimer = pSelf->Server()->Tick();
-            pSelf->SendChatTarget(ClientID, "Administrator give you a GOD bonus!");
+            pSelf->SendChatTarget(ClientID, "管理员给了你不死buff");
         }
         else if (Bonus == 2)
         {
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->AddBonus(BONUS_HOOKER);
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->m_HookerBonusTimer = pSelf->Server()->Tick();
-            pSelf->SendChatTarget(ClientID, "Administrator give you a HOOKER bonus!");
+            pSelf->SendChatTarget(ClientID, "管理员给了你爆炸钩buff");
         }
         else if (Bonus == 3) {
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->AddBonus(BONUS_INVISIBLE);
             pSelf->m_apPlayers[ClientID]->GetInfoTEEMO()->m_InvisibleBonusTimer = pSelf->Server()->Tick();
-            pSelf->SendChatTarget(ClientID, "Administrator give you a INVISIBLE bonus!");
+            pSelf->SendChatTarget(ClientID, "管理员给了你隐身buff");
         }
         else
             pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "Invalid bonus id to give");
@@ -1716,7 +1716,7 @@ void CGameContext::ConBonusList(IConsole::IResult *pResult, void *pUserData)
     char buff[128];
 
     pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", " ");
-    pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "BONUS LIST");
+    pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "奖励列表");
     pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "========= === =");
     for (int i=0; i<4; i++)
     {
