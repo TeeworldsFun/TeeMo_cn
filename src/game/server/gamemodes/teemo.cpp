@@ -80,17 +80,17 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
     if (str_comp_nocase(command.c_str(), "cmdlist") == 0)
     {
         GameServer()->SendChatTarget(ChatterClientID, "-");
-        GameServer()->SendChatTarget(ChatterClientID, "TeeMo - List Commands");
+        GameServer()->SendChatTarget(ChatterClientID, "TeeMo - 指令列表");
         GameServer()->SendChatTarget(ChatterClientID, "---------------- ---- -- -");
-        GameServer()->SendChatTarget(ChatterClientID, "+ /role list    > Show available roles");
-        GameServer()->SendChatTarget(ChatterClientID, "+ /role [role]  > Select a rol");
-        GameServer()->SendChatTarget(ChatterClientID, "+ /about        > About TeeMo");
+        GameServer()->SendChatTarget(ChatterClientID, "+ /role list    > 显示角色列表");
+        GameServer()->SendChatTarget(ChatterClientID, "+ /role [角色名]  > 选择一个角色");
+        GameServer()->SendChatTarget(ChatterClientID, "+ /about        > 关于TeeMo,教程");
     }
     else if (str_comp_nocase(command.c_str(), "role") == 0)
     {
         if (param.empty())
         {
-            GameServer()->SendChatTarget(ChatterClientID, "Invalid use of '/role' command! please write '/help' for more info");
+            GameServer()->SendChatTarget(ChatterClientID, "无效的'/role'指令! 请输入/cmdlist获取帮助");
         }
         else
         {
@@ -154,6 +154,14 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
         GameServer()->SendChatTarget(ChatterClientID, "----------------- ---- -- -");
         GameServer()->SendChatTarget(ChatterClientID, "MuffinMario (Beta-Tester)");
 	GameServer()->SendChatTarget(ChatterClientID, "FlowerFell-Sans (中文翻译者,服务器托管)");
+	GameServer()->SendChatTarget(ChatterClientID, "------------------------------------");
+	GameServer()->SendChatTarget(ChatterClientID, "TeeMo - 教程");
+	GameServer()->SendChatTarget(ChatterClientID, "将和你颜色不一样的人打死");
+	GameServer()->SendChatTarget(ChatterClientID, "夺取和你颜色不一样的旗帜并将旗插到自己家旗");
+	GameServer()->SendChatTarget(ChatterClientID, "多种武器类型，连续杀死敌人会获得奖励:");
+	GameServer()->SendChatTarget(ChatterClientID, "1,飞行 2,隐身 3,爆炸钩 4,额外爆炸武器 5,短暂无敌");
+	GameServer()->SendChatTarget(ChatterClientID, "服主QQ1421709710");
+	GameServer()->SendChatTarget(ChatterClientID, "按F1查看全文");
     }
     else
     {
@@ -385,7 +393,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_FLY);
         pKiller->GetInfoTEEMO()->m_FlyBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' kills %d 个玩家 获得了奖励rv r)->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 飞行," Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_InvisibleBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_INVISIBLE))
@@ -393,7 +401,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_INVISIBLE);
         pKiller->GetInfoTEEMO()->m_InvisibleBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' kills %d players without death and give INVISIBLE bonus.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 隐身.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_HookerBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_HOOKER))
@@ -401,14 +409,14 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_HOOKER);
         pKiller->GetInfoTEEMO()->m_HookerBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' kills %d players wsahout death and give HOOKER bonus.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 爆炸钩", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_ExtraBombBonusKills == 0 && pKiller->GetCharacter())
     {
         pKiller->GetCharacter()->GiveWeapon(WEAPON_EXTRA_BOMB_GRENADE, 10);
         char buff[128];
-        str_format(buff, sizeof(buff), "You kills %d players without death and give EXTRA BOMB weapon.", pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励武器 额外爆炸", pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(pKiller->GetCID(), buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_GodBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_GOD))
@@ -416,7 +424,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_GOD);
         pKiller->GetInfoTEEMO()->m_GodBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s' kills %d players without death and give GOD bonus.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 无敌.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
 
@@ -458,7 +466,7 @@ void CGameControllerTEEMO::DoWincheck()
 const char* CGameControllerTEEMO::GetTeamName(int Team)
 {
     if(Team == TEAM_RED)
-        return "humans team";
+        return "human team";
     else if(Team == TEAM_BLUE)
         return "aliens team";
 
@@ -686,22 +694,22 @@ void CGameControllerTEEMO::Tick()
         // Remove Bonus
         if (pPlayer->GetInfoTEEMO()->HaveBonus(BONUS_FLY) && Server()->Tick()-pPlayer->GetInfoTEEMO()->m_FlyBonusTimer > GameServer()->Tuning()->m_FlyBonusLifetime/Server()->TickSpeed())
         {
-            GameServer()->SendChatTarget(pPlayer->GetCID(), "FLY bonus removed!");
+            GameServer()->SendChatTarget(pPlayer->GetCID(), "飞行效果结束！哈哈哈");
             pPlayer->GetInfoTEEMO()->DelBonus(BONUS_FLY);
         }
         if (pPlayer->GetInfoTEEMO()->HaveBonus(BONUS_GOD) && Server()->Tick()-pPlayer->GetInfoTEEMO()->m_GodBonusTimer > GameServer()->Tuning()->m_GodBonusLifetime/Server()->TickSpeed())
         {
-            GameServer()->SendChatTarget(pPlayer->GetCID(), "GOD bonus removed!");
+            GameServer()->SendChatTarget(pPlayer->GetCID(), "上帝效果结束！");
             pPlayer->GetInfoTEEMO()->DelBonus(BONUS_GOD);
         }
         if (pPlayer->GetInfoTEEMO()->HaveBonus(BONUS_INVISIBLE) && Server()->Tick()-pPlayer->GetInfoTEEMO()->m_InvisibleBonusTimer > GameServer()->Tuning()->m_InvisibleBonusLifetime/Server()->TickSpeed())
         {
-            GameServer()->SendChatTarget(pPlayer->GetCID(), "INVISIBLE bonus removed!");
+            GameServer()->SendChatTarget(pPlayer->GetCID(), "隐身效果结束！");
             pPlayer->GetInfoTEEMO()->DelBonus(BONUS_INVISIBLE);
         }
         if (pPlayer->GetInfoTEEMO()->HaveBonus(BONUS_HOOKER) && Server()->Tick()-pPlayer->GetInfoTEEMO()->m_HookerBonusTimer > GameServer()->Tuning()->m_HookerBonusLifetime/Server()->TickSpeed())
         {
-            GameServer()->SendChatTarget(pPlayer->GetCID(), "HOOKER bonus removed!");
+            GameServer()->SendChatTarget(pPlayer->GetCID(), "爆炸钩奖励结束！");
             pPlayer->GetInfoTEEMO()->DelBonus(BONUS_HOOKER);
         }
 
