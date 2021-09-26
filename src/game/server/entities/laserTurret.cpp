@@ -75,7 +75,7 @@ void CLaserTurret::TakeDamage(int damage, int pID)
         if (pID != m_Owner)
         {
             char buff[255];
-            str_format(buff, sizeof(buff), "'%s' destroyed one of your turrets!", Server()->ClientName(pID));
+            str_format(buff, sizeof(buff), "'%s' 摧毁了你的一个炮塔！", Server()->ClientName(pID));
             GameServer()->SendChatTarget(m_Owner, buff);
         }
 
