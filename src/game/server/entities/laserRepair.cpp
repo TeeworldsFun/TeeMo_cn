@@ -65,7 +65,7 @@ bool CLaserRepair::HitTurret(vec2 From, vec2 To)
 
                 m_From = pLaserTurret->m_Pos;
                 char buff[128];
-                str_format(buff, sizeof(buff), "TURRET HEALTH: %d", pLaserTurret->GetHealth());
+                str_format(buff, sizeof(buff), "炮塔血量: %d", pLaserTurret->GetHealth());
                 GameServer()->SendBroadcast(buff, m_Owner);
                 return true;
             }
