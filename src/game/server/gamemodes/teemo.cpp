@@ -99,17 +99,17 @@ bool CGameControllerTEEMO::OnChat(int ChatterClientID, int Team, const char *pTe
                 GameServer()->SendChatTarget(ChatterClientID, "-");
                 GameServer()->SendChatTarget(ChatterClientID, "TeeMo - 角色列表");
                 GameServer()->SendChatTarget(ChatterClientID, "---------- ---- -- -");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Soldier 士兵  --输入 '/role soldier'成为此角色");
-                GameServer()->SendChatTarget(ChatterClientID, "+ General 将军  --输入 '/role general'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Soldier 士兵  --输入 '/role sol'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ General 将军  --输入 '/role gen'成为此角色");
                 GameServer()->SendChatTarget(ChatterClientID, "+ Medic 医生    --输入 '/role medic'成为此角色");
                 GameServer()->SendChatTarget(ChatterClientID, "+ Spy 间谍      --输入 '/role spy'成为此角色");
-                GameServer()->SendChatTarget(ChatterClientID, "+ Engineer 工程师-输入 '/role engineer'成为此角色");
+                GameServer()->SendChatTarget(ChatterClientID, "+ Engineer 工程师-输入 '/role eng'成为此角色");
             }
-            else if (str_comp_nocase(param.c_str(), "soldier") == 0 ||
-                       str_comp_nocase(param.c_str(), "general") == 0 ||
+            else if (str_comp_nocase(param.c_str(), "sol") == 0 ||
+                       str_comp_nocase(param.c_str(), "gen") == 0 ||
                        str_comp_nocase(param.c_str(), "medic") == 0 ||
                        str_comp_nocase(param.c_str(), "spy") == 0 ||
-                       str_comp_nocase(param.c_str(), "engineer") == 0)
+                       str_comp_nocase(param.c_str(), "eng") == 0)
             {
                 if (pPlayer->GetInfoTEEMO()->GetRole() == GetRoleID(param.c_str()))
                 {
@@ -180,11 +180,11 @@ void CGameControllerTEEMO::OnClientEnter(int ClientID)
     GameServer()->m_apPlayers[ClientID]->GetInfoTEEMO()->SetRealTeam(GameServer()->m_apPlayers[ClientID]->GetTeam());
 
     GameServer()->SendChatTarget(ClientID, "欢迎来到TeeMo v"TEEMO_VERSION);
-    GameServer()->SendChatTarget(ClientID, "输入/cmdlist获取角色列表");
+    GameServer()->SendChatTarget(ClientID, "输入/cmdlist获取角色指令");
     GameServer()->SendChatTarget(ClientID, " ");
     if (!HaveOriginalConfig())
     {
-        GameServer()->SendChatTarget(ClientID, "-- 警告 此服务器使用了tune");
+        GameServer()->SendChatTarget(ClientID, "-- 此服务器使用了tune");
         GameServer()->SendChatTarget(ClientID, " ");
     }
 
@@ -231,8 +231,8 @@ bool CGameControllerTEEMO::ChangeCharacterRole(int ClientID, const char *role)
 
 int CGameControllerTEEMO::GetRoleID(const char *role)
 {
-    if (str_comp_nocase(role, "general") == 0) { return ROLE_GENERAL; }
-    else if (str_comp_nocase(role, "engineer") == 0) { return ROLE_ENGINEER; }
+    if (str_comp_nocase(role, "gen") == 0) { return ROLE_GENERAL; }
+    else if (str_comp_nocase(role, "eng") == 0) { return ROLE_ENGINEER; }
     else if (str_comp_nocase(role, "spy") == 0) { return ROLE_SPY; }
     else if (str_comp_nocase(role, "medic") == 0) { return ROLE_MEDIC; }
     else { return ROLE_SOLDIER; }
@@ -264,11 +264,11 @@ void CGameControllerTEEMO::UpdateClientClan(int ClientID)
 
 const char* CGameControllerTEEMO::GetRoleName(int role)
 {
-    if (role == ROLE_ENGINEER) { return "Engineer"; }
-    else if (role == ROLE_GENERAL) { return "General"; }
-    else if (role == ROLE_MEDIC) { return "Medic"; }
-    else if (role == ROLE_SOLDIER) { return "Soldier"; }
-    else if (role == ROLE_SPY) { return "Solier"; } // Hide real name
+    if (role == ROLE_ENGINEER) { return "工程师"; }
+    else if (role == ROLE_GENERAL) { return "指挥官"; }
+    else if (role == ROLE_MEDIC) { return "医生"; }
+    else if (role == ROLE_SOLDIER) { return "士兵"; }
+    else if (role == ROLE_SPY) { return "士兵"; } // Hide real name
 
     return "Unknown";
 }
@@ -466,9 +466,9 @@ void CGameControllerTEEMO::DoWincheck()
 const char* CGameControllerTEEMO::GetTeamName(int Team)
 {
     if(Team == TEAM_RED)
-        return "human team";
+        return "人类";
     else if(Team == TEAM_BLUE)
-        return "aliens team";
+        return "外星人";
 
     return IGameController::GetTeamName(Team);
 }

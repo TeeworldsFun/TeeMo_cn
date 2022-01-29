@@ -243,7 +243,7 @@ void CCharacter::DoBuildTurret()
         float dist = distance(m_Pos, pos);
         if (dist <= GameServer()->Tuning()->m_LaserReach+100.0f && !GameServer()->Collision()->IntersectLine(m_Pos, pos, 0x0, 0x0))
         {
-            GameServer()->SendBroadcast("Can't build turrets here!", m_pPlayer->GetCID());
+            GameServer()->SendBroadcast("\n\n\n\n\n无法在此处建筑炮塔！", m_pPlayer->GetCID());
             return;
         }
 
@@ -262,11 +262,11 @@ void CCharacter::DoBuildTurret()
             char buff[255]={0};
             if (pLaserTurret->m_BuildProcess == 100.0f)
             {
-                str_format(buff, sizeof(buff), "BUILDING TURRET... COMPLETE!");
+                str_format(buff, sizeof(buff), "炮塔建筑中... 完成！");
                 m_pActiveEntity = 0x0;
             }
             else
-                str_format(buff, sizeof(buff), "BUILDING TURRET... %.2f%c", pLaserTurret->m_BuildProcess, '%');
+                str_format(buff, sizeof(buff), "炮塔建筑中... %.2f%c", pLaserTurret->m_BuildProcess, '%');
 
             GameServer()->SendBroadcast(buff, m_pPlayer->GetCID());
         }
@@ -290,7 +290,7 @@ void CCharacter::DoBuildTurret()
 
             if (nturrets >= GameServer()->Tuning()->m_LaserTurretNum)
             {
-                GameServer()->SendBroadcast("Can't build more turrest!", m_pPlayer->GetCID());
+                GameServer()->SendBroadcast("\n\n\n\n\n无法建筑更多的炮塔", m_pPlayer->GetCID());
                 return;
             }
         }
@@ -299,12 +299,12 @@ void CCharacter::DoBuildTurret()
         int Num = GameServer()->m_World.FindEntities(m_Pos, GameServer()->Tuning()->m_LaserTurretRadius/2, (CEntity**)apEnts, 1, CGameWorld::ENTTYPE_LASER);
         if (Num > 0)
         {
-            GameServer()->SendBroadcast("Can't build the turret here!", m_pPlayer->GetCID());
+            GameServer()->SendBroadcast("无法在此处制造更多炮塔！", m_pPlayer->GetCID());
             return;
         }
 
         m_pActiveEntity = new CLaserTurret(GameWorld(), m_Pos, m_pPlayer->GetCID());
-        GameServer()->SendBroadcast("BUILDING TURRET... 0.0%", m_pPlayer->GetCID());
+        GameServer()->SendBroadcast("炮塔建筑中... 0.0%", m_pPlayer->GetCID());
     }
 
     GameServer()->CreateSound(m_Pos, SOUND_RIFLE_BOUNCE);
@@ -349,22 +349,22 @@ void CCharacter::HandleWeaponSwitch()
 		m_QueuedWeapon = WantedWeapon;
 
 		// TeeMo
-		if (WantedWeapon == WEAPON_GRENADE) { GameServer()->SendBroadcast("GRENADE", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_GUN) { GameServer()->SendBroadcast("GUN", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_RIFLE) { GameServer()->SendBroadcast("RIFLE", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_SHOTGUN) { GameServer()->SendBroadcast("SHOTGUN", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_HAMMER) { GameServer()->SendBroadcast("HAMMER", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_NINJA) { GameServer()->SendBroadcast("NINJA", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_PHANTOM_GRENADE) { GameServer()->SendBroadcast("PHANTOM GRENADE", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_AIR_GRENADE) { GameServer()->SendBroadcast("AIR GRENADE", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_LASER_GRENADE) { GameServer()->SendBroadcast("LASER GRENADE", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_PLASMA_RIFLE) { GameServer()->SendBroadcast("PLASMA", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_TURRET) { GameServer()->SendBroadcast("TURRET", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_DRAGON_GRENADE) { GameServer()->SendBroadcast("DRAGON GRENADE", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_HEALER_RIFLE) { GameServer()->SendBroadcast("LASER HEALER", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_REPAIR_RIFLE) { GameServer()->SendBroadcast("LASER REPAIR", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_EXTRA_BOMB_GRENADE) { GameServer()->SendBroadcast("EXTRA BOMB", m_pPlayer->GetCID()); }
-        else { GameServer()->SendBroadcast("WEAPON UNKNOWN! REPORT THIS PLS! :S", m_pPlayer->GetCID()); }
+		if (WantedWeapon == WEAPON_GRENADE) { GameServer()->SendBroadcast("榴弹炮", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_GUN) { GameServer()->SendBroadcast("手枪", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_RIFLE) { GameServer()->SendBroadcast("激光枪", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_SHOTGUN) { GameServer()->SendBroadcast("散弹枪", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_HAMMER) { GameServer()->SendBroadcast("锤子", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_NINJA) { GameServer()->SendBroadcast("忍者", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_PHANTOM_GRENADE) { GameServer()->SendBroadcast("幻影榴弹炮", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_AIR_GRENADE) { GameServer()->SendBroadcast("空气榴弹枪", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_LASER_GRENADE) { GameServer()->SendBroadcast("激光炸弹", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_PLASMA_RIFLE) { GameServer()->SendBroadcast("等离子体发射器", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_TURRET) { GameServer()->SendBroadcast("炮塔", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_DRAGON_GRENADE) { GameServer()->SendBroadcast("龙炮", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_HEALER_RIFLE) { GameServer()->SendBroadcast("治疗电击枪", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_REPAIR_RIFLE) { GameServer()->SendBroadcast("修复激光枪", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_EXTRA_BOMB_GRENADE) { GameServer()->SendBroadcast("【第二炸弹】- 枯萎穿心攻击！", m_pPlayer->GetCID()); }
+        else { GameServer()->SendBroadcast("错误", m_pPlayer->GetCID()); }
 	}
 
 	DoWeaponSwitch();

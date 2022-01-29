@@ -107,11 +107,11 @@ void CPickup::Tick()
 					{
                         GameServer()->CreateSound(m_Pos, SOUND_PICKUP_GRENADE);
                         char buff[128];
-                        if (m_Subtype == WEAPON_PHANTOM_GRENADE) { str_format(buff, sizeof(buff), "You found a PHANTOM GRENADE!"); }
-                        else if (m_Subtype == WEAPON_AIR_GRENADE) { str_format(buff, sizeof(buff), "You found a AIR GRENADE!"); }
-                        else if (m_Subtype == WEAPON_LASER_GRENADE) { str_format(buff, sizeof(buff), "You found a LASER GRENADE!"); }
-                        else if (m_Subtype == WEAPON_PLASMA_RIFLE) { str_format(buff, sizeof(buff), "You found a PLASMA!"); }
-                        else if (m_Subtype == WEAPON_DRAGON_GRENADE) { str_format(buff, sizeof(buff), "You found a DRAGON GRENADE!"); }
+                        if (m_Subtype == WEAPON_PHANTOM_GRENADE) { str_format(buff, sizeof(buff), "你捡到了一把幻影榴弹枪！"); }
+                        else if (m_Subtype == WEAPON_AIR_GRENADE) { str_format(buff, sizeof(buff), "你捡到了一把空气榴弹炮！"); }
+                        else if (m_Subtype == WEAPON_LASER_GRENADE) { str_format(buff, sizeof(buff), "你捡到了激光炸弹！"); }
+                        else if (m_Subtype == WEAPON_PLASMA_RIFLE) { str_format(buff, sizeof(buff), "你捡到了一把等离子体发射器！"); }
+                        else if (m_Subtype == WEAPON_DRAGON_GRENADE) { str_format(buff, sizeof(buff), "你捡到了一把龙炮！"); }
                         else { str_format(buff, sizeof(buff), "You give a UNKOWN WEAPON!"); }
                         GameServer()->SendChatTarget(pChr->GetPlayer()->GetCID(), buff);
                         GameServer()->m_World.DestroyEntity(this);

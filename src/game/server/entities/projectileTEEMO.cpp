@@ -143,11 +143,11 @@ void CProjectileLaserGrenade::Tick()
                 if (pLaserTurret->GetHealth() > 0.0f)
                 {
                     char buff[255]={0};
-                    str_format(buff, sizeof(buff), "TURRET HEALTH: %d", pLaserTurret->GetHealth());
+                    str_format(buff, sizeof(buff), "炮塔血量: %d", pLaserTurret->GetHealth());
                     GameServer()->SendBroadcast(buff, m_Owner);
                 }
                 else
-                    GameServer()->SendBroadcast("TURRET DESTROYED!", m_Owner);
+                    GameServer()->SendBroadcast("炮塔被摧毁！", m_Owner);
 
                 Collide = true;
             }

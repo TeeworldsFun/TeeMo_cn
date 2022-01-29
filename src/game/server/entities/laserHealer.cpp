@@ -37,7 +37,7 @@ bool CLaserHealer::HitCharacter(vec2 From, vec2 To)
             pHit->TakeDamage(vec2(0.f, 0.f), 1, m_Owner, WEAPON_RIFLE);
 
         char buff[128];
-        str_format(buff, sizeof(buff), "PLAYER HEALTH: %d", pHit->GetHealth());
+        str_format(buff, sizeof(buff), "玩家血量: %d", pHit->GetHealth());
         GameServer()->SendBroadcast(buff, m_Owner);
         m_HealerTimer = Server()->Tick();
     }

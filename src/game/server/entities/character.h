@@ -68,7 +68,7 @@ public:
 	class CPlayer *GetPlayer() { return m_pPlayer; }
 
     // TeeMo
-	int GetWeapon() const { return m_ActiveWeapon; }
+	int GetWeapon() const { return m_ActiveWeapon;}
 	int GetHealth() const { return m_Health; }
 	CPickup *m_pIndicatorPickup;
 
