@@ -1,11 +1,15 @@
-sv_name 『中国活动服』TeeMo最终夺旗 [CHNFun]
+sv_name "『中国活动服』TeeMo最终夺旗 [CHNFun]"
 sv_motd "中国玩家输入/cmdlist获取帮助\n服主QQ1421709710\nHost By FlowerFell-Sans\nHost Discord Account:TeeFlowerFell-Sans#9358"
 add_vote "===Map=地图===" "broadcast YAML IS SHIT"
 add_vote "ctf1" "sv_map ctf1"
+add_vote "ctf5" "sv_map ctf5"
 add_vote "ctf5_teemo" "sv_map ctf5_teemo"
+sv_port 22584
 sv_gametype teemo
 sv_rcon_password rcon
 sv_map ctf5_teemo
 sv_register 1
 sv_scorelimit 700
 sv_timelimit 10
+sv_max_clients 16
+sv_max_clients_per_ip 1
