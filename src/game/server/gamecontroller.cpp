@@ -8,6 +8,7 @@
 #include "entities/pickup.h"
 #include "gamecontroller.h"
 #include "gamecontext.h"
+#include "entities/time-TM.h"
 
 
 IGameController::IGameController(class CGameContext *pGameServer)
@@ -160,6 +161,8 @@ bool IGameController::OnEntity(int Index, vec2 Pos)
 		Type = POWERUP_NINJA;
 		SubType = WEAPON_NINJA;
 	}
+	else if(Index == ENTITY_TIME)
+		new CTime(&GameServer()->m_World, Pos);
 
 	if(Type != -1)
 	{
@@ -333,7 +336,7 @@ void IGameController::OnEndRound()
 
 void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 {
-	const int aTeamColors[2] = {65387, 10223467};
+	const int aTeamColors[2] = {965387, 910223467};
 	if(IsTeamplay())
 	{
 		pP->m_TeeInfos.m_UseCustomColor = 1;
@@ -344,8 +347,8 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		}
 		else
 		{
-			pP->m_TeeInfos.m_ColorBody = 12895054;
-			pP->m_TeeInfos.m_ColorFeet = 12895054;
+			pP->m_TeeInfos.m_ColorBody = 42895054;
+			pP->m_TeeInfos.m_ColorFeet = 42895054;
 		}
 	}
 }

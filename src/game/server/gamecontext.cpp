@@ -1659,7 +1659,7 @@ void CGameContext::ConGiveWeapon(IConsole::IResult *pResult, void *pUserData)
         else if (Weapon == WEAPON_DRAGON_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你一把龙炮!"); }
         else if (Weapon == WEAPON_HEALER_RIFLE) { str_format(buff, sizeof(buff), "管理员给了你一把治疗激光!"); }
         else if (Weapon == WEAPON_REPAIR_RIFLE) { str_format(buff, sizeof(buff), "管理员给了你一把修理激光!"); }
-        else if (Weapon == WEAPON_EXTRA_BOMB_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你额外爆炸武器"); }
+        else if (Weapon == WEAPON_EXTRA_BOMB_GRENADE) { str_format(buff, sizeof(buff), "管理员给了你吉良吉影的第二炸弹！"); }
         else
         {
             pSelf->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "Invalid weapon id to give");

@@ -14,6 +14,7 @@ class CPlayer
 	MACRO_ALLOC_POOL_ID()
 
 public:
+	CInfoTEEMO *m_TeeMo;
 	CPlayer(CGameContext *pGameServer, int ClientID, int Team);
 	~CPlayer();
 

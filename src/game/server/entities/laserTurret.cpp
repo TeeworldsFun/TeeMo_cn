@@ -109,7 +109,39 @@ void CLaserTurret::Tick()
         m_pIndicatorPickup = 0x0;
     }
 
+    if(Server()->Tick()%10 == 0)
+    {
+        GameServer()->CreateDeath(m_Pos, m_Owner);
+    }
+
 	HitCharacter();
+
+    for(int i = 0; i < MAX_CLIENTS; i++)
+        {
+            CCharacter* pHit = GameServer()->GetPlayerChar(i);
+
+            if(Server()->Tick()%100 == 0)
+                continue;
+            
+            if(!pHit)
+                continue;
+
+            if(distance(pHit->m_Pos, m_Pos) > 60)
+                continue;
+
+            if(Server()->Tick()%25 == 0)
+                continue;
+
+            if(pHit->GetPlayer()->GetTeam() == GameServer()->m_apPlayers[m_Owner]->GetTeam())
+            {
+                if(pHit->GetHealth() < 10)
+                    pHit->IncreaseHealth(1);
+                else
+                    continue;
+            }
+            else
+                pHit->TakeDamage(vec2(0, 0), 1, m_Owner, -1);
+       }
 }
 
 void CLaserTurret::Snap(int SnappingClient)

@@ -6,8 +6,8 @@
 #include <game/server/entity.h>
 #include <list>
 
-#define TEEMO_VERSION   "3.1"
-#define TEEMO_BUILD     "23022014"
+#define TEEMO_VERSION   "3.7"
+#define TEEMO_BUILD     "2022.01.30."
 
 class CGameControllerTEEMO : public IGameController
 {

@@ -67,6 +67,8 @@ protected:
 	bool m_MarkedForDestroy;
 	int m_ID;
 	int m_ObjType;
+
+	int GetID() const { return m_ID; }
 public:
 	CEntity(CGameWorld *pGameWorld, int Objtype);
 	virtual ~CEntity();

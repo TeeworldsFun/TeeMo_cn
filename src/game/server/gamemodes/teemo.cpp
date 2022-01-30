@@ -393,7 +393,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_FLY);
         pKiller->GetInfoTEEMO()->m_FlyBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 飞行", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励 飞行", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_InvisibleBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_INVISIBLE))
@@ -401,7 +401,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_INVISIBLE);
         pKiller->GetInfoTEEMO()->m_InvisibleBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 隐身.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励 隐身.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_HookerBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_HOOKER))
@@ -416,7 +416,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
     {
         pKiller->GetCharacter()->GiveWeapon(WEAPON_EXTRA_BOMB_GRENADE, 10);
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励武器 额外爆炸", pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了吉良吉影的第二炸弹！", pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(pKiller->GetCID(), buff);
     }
     if (pKiller->GetInfoTEEMO()->m_Kills%(int)GameServer()->Tuning()->m_GodBonusKills == 0 && !pKiller->GetInfoTEEMO()->HaveBonus(BONUS_GOD))
@@ -424,7 +424,7 @@ int CGameControllerTEEMO::OnCharacterDeath(class CCharacter *pVictim, class CPla
         pKiller->GetInfoTEEMO()->AddBonus(BONUS_GOD);
         pKiller->GetInfoTEEMO()->m_GodBonusTimer = Server()->Tick();
         char buff[128];
-        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励buff 无敌.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
+        str_format(buff, sizeof(buff), "'%s'在不死亡的情况下连续击杀了%d个玩家 获得了奖励 无敌.", Server()->ClientName(pKiller->GetCID()), pKiller->GetInfoTEEMO()->m_Kills);
         GameServer()->SendChatTarget(-1, buff);
     }
 

@@ -349,22 +349,22 @@ void CCharacter::HandleWeaponSwitch()
 		m_QueuedWeapon = WantedWeapon;
 
 		// TeeMo
-		if (WantedWeapon == WEAPON_GRENADE) { GameServer()->SendBroadcast("榴弹炮", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_GUN) { GameServer()->SendBroadcast("手枪", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_RIFLE) { GameServer()->SendBroadcast("激光枪", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_SHOTGUN) { GameServer()->SendBroadcast("散弹枪", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_HAMMER) { GameServer()->SendBroadcast("锤子", m_pPlayer->GetCID()); }
-		else if (WantedWeapon == WEAPON_NINJA) { GameServer()->SendBroadcast("忍者", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_PHANTOM_GRENADE) { GameServer()->SendBroadcast("幻影榴弹炮", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_AIR_GRENADE) { GameServer()->SendBroadcast("空气榴弹枪", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_LASER_GRENADE) { GameServer()->SendBroadcast("激光炸弹", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_PLASMA_RIFLE) { GameServer()->SendBroadcast("等离子体发射器", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_TURRET) { GameServer()->SendBroadcast("炮塔", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_DRAGON_GRENADE) { GameServer()->SendBroadcast("龙炮", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_HEALER_RIFLE) { GameServer()->SendBroadcast("治疗电击枪", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_REPAIR_RIFLE) { GameServer()->SendBroadcast("修复激光枪", m_pPlayer->GetCID()); }
-        else if (WantedWeapon == WEAPON_EXTRA_BOMB_GRENADE) { GameServer()->SendBroadcast("【第二炸弹】- 枯萎穿心攻击！", m_pPlayer->GetCID()); }
-        else { GameServer()->SendBroadcast("错误", m_pPlayer->GetCID()); }
+		if (WantedWeapon == WEAPON_GRENADE) { GameServer()->SendBroadcast("\n\n\n\n\n榴弹炮", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_GUN) { GameServer()->SendBroadcast("\n\n\n\n\n手枪", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_RIFLE) { GameServer()->SendBroadcast("\n\n\n\n\n激光枪", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_SHOTGUN) { GameServer()->SendBroadcast("\n\n\n\n\n散弹枪", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_HAMMER) { GameServer()->SendBroadcast("\n\n\n\n\n锤子", m_pPlayer->GetCID()); }
+		else if (WantedWeapon == WEAPON_NINJA) { GameServer()->SendBroadcast("\n\n\n\n\n忍者", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_PHANTOM_GRENADE) { GameServer()->SendBroadcast("\n\n\n\n\n幻影榴弹炮", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_AIR_GRENADE) { GameServer()->SendBroadcast("\n\n\n\n\n空气榴弹枪", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_LASER_GRENADE) { GameServer()->SendBroadcast("\n\n\n\n\n激光炸弹", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_PLASMA_RIFLE) { GameServer()->SendBroadcast("\n\n\n\n\n等离子体发射器", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_TURRET) { GameServer()->SendBroadcast("\n\n\n\n\n炮塔", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_DRAGON_GRENADE) { GameServer()->SendBroadcast("\n\n\n\n\n龙炮", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_HEALER_RIFLE) { GameServer()->SendBroadcast("\n\n\n\n\n治疗电击枪", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_REPAIR_RIFLE) { GameServer()->SendBroadcast("\n\n\n\n\n修复激光枪", m_pPlayer->GetCID()); }
+        else if (WantedWeapon == WEAPON_EXTRA_BOMB_GRENADE) { GameServer()->SendBroadcast("\n\n\n\n\n\n\n\n\n\n\n【第二炸弹】- 枯萎穿心攻击！", m_pPlayer->GetCID()); }
+        else { GameServer()->SendBroadcast("\n\n\n\n\n\n\n\n\n\n错误", m_pPlayer->GetCID()); }
 	}
 
 	DoWeaponSwitch();
@@ -1039,11 +1039,11 @@ void CCharacter::TickDefered()
 	if(Events&COREEVENT_HOOK_HIT_NOHOOK) GameServer()->CreateSound(m_Pos, SOUND_HOOK_NOATTACH, Mask);
 
 
-	if(m_pPlayer->GetTeam() == TEAM_SPECTATORS)
+	/*if()
 	{
 		m_Pos.x = m_Input.m_TargetX;
 		m_Pos.y = m_Input.m_TargetY;
-	}
+	}*/
 
 	// update the m_SendCore if needed
 	{
@@ -1128,6 +1128,7 @@ void CCharacter::Die(int Killer, int Weapon)
 
 bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 {
+	GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
 	m_Core.m_Vel += Force;
 
     // TeeMo

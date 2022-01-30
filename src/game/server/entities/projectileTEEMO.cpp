@@ -64,6 +64,12 @@ vec2 CProjectileLaserGrenade::GetPos(float Time)
             Speed = 0;
 
             break;
+        
+        case WEAPON_EXTRA_BOMB_GRENADE:
+            Curvature = 0;
+            Speed = 900;
+
+            break;
 	}
 
 	return CalcPos(m_Pos, m_Direction, Curvature, Speed, Time);
@@ -109,7 +115,7 @@ void CProjectileLaserGrenade::Tick()
                 m_DragonActive = true;
 
             GameServer()->CreateExplosion(CurPos, m_Owner, m_Weapon, false);
-            GameServer()->CreateSound(CurPos, m_SoundImpact);
+            GameServer()->CreateSound(CurPos, SOUND_HAMMER_FIRE);
             m_DragonTime = Server()->Tick();
         }
     } else if (m_Type == WEAPON_AIR_GRENADE && !Collide)
@@ -128,6 +134,31 @@ void CProjectileLaserGrenade::Tick()
 
         if (NumTeam > 0)
             Collide = true;
+    } else if (m_Type == WEAPON_EXTRA_BOMB_GRENADE)
+    {
+        for(int i = 0; i < MAX_CLIENTS; i++)
+        {
+            CCharacter* pHit = GameServer()->GetPlayerChar(i);
+
+            if(!pHit)
+                continue;
+
+            if(distance(pHit->m_Pos, m_Pos) > 60)
+                continue;
+
+            if(Server()->Tick()%25 == 0)
+                continue;
+
+            if(pHit->GetPlayer()->GetTeam() == GameServer()->m_apPlayers[m_Owner]->GetTeam())
+            {
+                if(pHit->GetHealth() < 10)
+                    pHit->IncreaseHealth(1);
+                else
+                    continue;
+            }
+            else
+                pHit->TakeDamage(vec2(0, 0), 1, m_Owner, -1);
+       }
     }
 
 	if (!Collide)
@@ -167,7 +198,7 @@ void CProjectileLaserGrenade::Tick()
 
         if (!TargetChr && m_Type == WEAPON_LASER_GRENADE)
         {
-            vec2 Spreading[9];
+            vec2 Spreading[10];
             Spreading[0] = vec2(-1,0);
             Spreading[1] = vec2(1,0);
             Spreading[2] = vec2(0,-1);
@@ -177,6 +208,7 @@ void CProjectileLaserGrenade::Tick()
             Spreading[6] = vec2(1,1);
             Spreading[7] = vec2(-1,-1);
             Spreading[8] = vec2(0,0);
+            Spreading[9] = GameServer()->m_apPlayers[m_Owner]->GetCharacter()->m_Pos;
 			for(int i = 0; i <= sizeof(Spreading)/sizeof(vec2); ++i)
                 new CLaserGrenade(GameWorld(), PrevPos, Spreading[i], i%2==0?GameServer()->Tuning()->m_LaserGrenadeReach:GameServer()->Tuning()->m_LaserGrenadeReach-(GameServer()->Tuning()->m_LaserGrenadeReach/2), m_Owner);
 
